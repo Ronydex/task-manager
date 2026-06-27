@@ -1,6 +1,6 @@
 package com.taskmanager.model;
 
-public enum roles{
+public enum Roles{
     ROL_PM,
     ROL_DEV,
     ADMIN,

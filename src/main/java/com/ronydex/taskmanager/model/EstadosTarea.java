@@ -1,7 +1,7 @@
 
 package com.taskmanager.model;
 
-public enum estadosTarea{
+public enum EstadosTarea{
     PENDIENTE,
     EN_PROCESO,
     SOLUCION_PLANIFICADA,

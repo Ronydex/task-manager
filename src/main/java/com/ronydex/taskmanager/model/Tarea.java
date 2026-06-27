@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "tarea")
 
-public class tarea{
+public class Tarea{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +35,7 @@ public class tarea{
     @Column(name = "fecha_solucion", updatable = true)
     private LocalDateTime fechaSolucion;
 
-    public tarea(String tituloTarea, String descripcionTarea, estadosTarea estadoActTar, usuario creadoPorId, usuario asignadoAId, LocalDateTime fechaCreacion, LocalDateTime fechaSolucion){
+    public Tarea(String tituloTarea, String descripcionTarea, estadosTarea estadoActTar, usuario creadoPorId, usuario asignadoAId, LocalDateTime fechaCreacion, LocalDateTime fechaSolucion){
         this.tituloTarea = tituloTarea;
         this.descripcionTarea = descripcionTarea;
         this.estadoActTar = estadoActTar;
@@ -45,7 +45,7 @@ public class tarea{
         this.fechaSolucion = fechaSolucion;
     }
 
-    public tarea(){
+    public Tarea(){
         }
 
     public Long getIdTarea(){ return idTarea; }
