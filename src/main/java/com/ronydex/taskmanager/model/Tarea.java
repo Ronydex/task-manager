@@ -1,4 +1,4 @@
-package com.taskmanager.model;
+package com.ronydex.taskmanager.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -19,15 +19,15 @@ public class Tarea{
     private String descripcionTarea;
 
     @Enumerated(EnumType.STRING)
-    private estadosTarea estadoActTar;
+    private EstadosTarea estadoActTar;
 
     @ManyToOne
     @JoinColumn(name = "usuarioCrea")
-    private usuario creadoPorId;
+    private Usuario creadoPorId;
 
     @ManyToOne
     @JoinColumn(name = "usuarioAsig")
-    private usuario asignadoAId;
+    private Usuario asignadoAId;
 
     @Column(name = "fecha_creacion", updatable = false)
     private LocalDateTime fechaCreacion = LocalDateTime.now();
@@ -35,7 +35,7 @@ public class Tarea{
     @Column(name = "fecha_solucion", updatable = true)
     private LocalDateTime fechaSolucion;
 
-    public Tarea(String tituloTarea, String descripcionTarea, estadosTarea estadoActTar, usuario creadoPorId, usuario asignadoAId, LocalDateTime fechaCreacion, LocalDateTime fechaSolucion){
+    public Tarea(String tituloTarea, String descripcionTarea, EstadosTarea estadoActTar, Usuario creadoPorId, Usuario asignadoAId, LocalDateTime fechaCreacion, LocalDateTime fechaSolucion){
         this.tituloTarea = tituloTarea;
         this.descripcionTarea = descripcionTarea;
         this.estadoActTar = estadoActTar;
@@ -57,14 +57,14 @@ public class Tarea{
     public String getDescripcionTarea() { return descripcionTarea; }
     public void setDescripcionTarea(String descripcionTarea) { this.descripcionTarea = descripcionTarea; }
 
-    public estadosTarea getEstadoActTar() { return estadoActTar; }
-    public void setEstadoActTar(estadosTarea estadoActTar) {this.estadoActTar = estadoActTar; }
+    public EstadosTarea getEstadoActTar() { return estadoActTar; }
+    public void setEstadoActTar(EstadosTarea estadoActTar) {this.estadoActTar = estadoActTar; }
 
-    public usuario getCreadoPorId() { return creadoPorId; }
-    public void setCreadoPorId(usuario creadoPorId) { this.creadoPorId = creadoPorId; }
+    public Usuario getCreadoPorId() { return creadoPorId; }
+    public void setCreadoPorId(Usuario creadoPorId) { this.creadoPorId = creadoPorId; }
 
-    public usuario getAsignadoAId() { return asignadoAId; }
-    public void setAsignadoAId(usuario asignadoAId) { this.asignadoAId = asignadoAId;}    
+    public Usuario getAsignadoAId() { return asignadoAId; }
+    public void setAsignadoAId(Usuario asignadoAId) { this.asignadoAId = asignadoAId;}    
 
     public LocalDateTime getFechaCreacion() { return fechaCreacion; }
     public void setFechaCreacion(LocalDateTime fechaCreacion) { this.fechaCreacion = fechaCreacion; }

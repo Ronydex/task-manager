@@ -1,4 +1,4 @@
-package com.taskmanager.model;
+package com.ronydex.taskmanager.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -26,7 +26,7 @@ public class Usuario{
     private LocalDateTime fechaRegistro = LocalDateTime.now();
 
     @Enumerated(EnumType.STRING)
-    private roles rol_asignado;
+    private Roles rol_asignado;
 
 
     //Getters y Setters:
@@ -43,7 +43,7 @@ public class Usuario{
     public String getPassword(){ return password; }
     public void setPassword(String password) { this.password = password; }
 
-    public LocalDateTime getFechaRegistro(){ this.fechaRegistro = fechaRegistro; }
+    public LocalDateTime getFechaRegistro(){ return fechaRegistro; }
     public void setFechaRegistro(LocalDateTime fechaRegistro) { this.fechaRegistro = fechaRegistro; }
 
 

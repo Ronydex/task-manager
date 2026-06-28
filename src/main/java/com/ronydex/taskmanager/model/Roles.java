@@ -1,4 +1,4 @@
-package com.taskmanager.model;
+package com.ronydex.taskmanager.model;
 
 public enum Roles{
     ROL_PM,

@@ -1,6 +1,6 @@
-package com.taskmanager.repository;
+package com.ronydex.taskmanager.repository;
 
-import com.taskmanager.model.Usuario;
+import com.ronydex.taskmanager.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;

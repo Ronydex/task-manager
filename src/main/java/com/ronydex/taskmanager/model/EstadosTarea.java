@@ -1,5 +1,4 @@
-
-package com.taskmanager.model;
+package com.ronydex.taskmanager.model;
 
 public enum EstadosTarea{
     PENDIENTE,
