@@ -26,7 +26,7 @@ public class Usuario{
     private LocalDateTime fechaRegistro = LocalDateTime.now();
 
     @Enumerated(EnumType.STRING)
-    private Roles rol_asignado;
+    private Roles rolAsignado;
 
 
     //Getters y Setters:
