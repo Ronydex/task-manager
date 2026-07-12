@@ -1,9 +1,10 @@
 package com.ronydex.taskmanager.dto;
 
+
 import com.ronydex.taskmanager.model.Roles;
 import jakarta.validation.constraints.*;
 
-public class UsuarioRegistroDTO{
+public class UsuarioDTO{
     
     @NotBlank(message="El nombre del usuario no debe estar vacío")
     private String nombre;
