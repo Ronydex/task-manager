@@ -33,4 +33,19 @@ public class UsuarioService {
 	return respuesta;
     
     }
+
+    public UsuarioResponseDTO obtenerPorId(Long id){
+       Usuario usuario = usuarioRepo.findById(id)
+		.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+	UsuarioResponseDTO respuesta = new UsuarioResponseDTO();
+	respuesta.setNombre(usuario.getNombre());
+	respuesta.setEmail(usuario.getEmail());
+  	respuesta.setRolAsignado(usuario.getRolAsignado());
+	respuesta.setFechaRegistro(usuario.getFechaRegistro());
+	respuesta.setIdUsuario(usuario.getIdUsuario());
+	return respuesta;
+
+    }
+
+
 }
