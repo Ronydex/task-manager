@@ -1,8 +1,6 @@
 package com.ronydex.taskmanager.dto;
 
 import com.ronydex.taskmanager.model.EstadosTarea;
-import com.ronydex.taskmanager.model.Usuario;
-import java.time.LocalDateTime;
 import jakarta.validation.constraints.*;
 
 public class TareaRegistroDTO{
@@ -17,10 +15,10 @@ public class TareaRegistroDTO{
 	private EstadosTarea estadoActTar;
 
 	@NotNull(message="La tarea debe ser creada por un Usuario")
-	private Long creadoPorId;
+	private String creadoPor;
 
 	@NotNull(message="La tarea debe ser asignada a un Usuario")
-	private Long  asignadoAId;
+	private String asignadoA;
 
 	//GETTTERS Y SETTERS
 
@@ -33,9 +31,9 @@ public class TareaRegistroDTO{
 	public EstadosTarea getEstadoActTar(){return estadoActTar;}
 	public void setEstadoActTar(EstadosTarea estadoActTar){this.estadoActTar = estadoActTar;}
 
-	public Long  getCreadoPorId(){return creadoPorId;}
-	public void setCreadoPorId(Long creadoPorId){this.creadoPorId = creadoPorId;}
+	public String getCreadoPor(){return creadoPor;}
+	public void setCreadoPor(String creadoPor){this.creadoPor = creadoPor;}
 
-	public Long getAsignadoAId(){return asignadoAId;}
-	public void setAsignadoAId(Long asignadoAId){this.asignadoAId = asignadoAId;}
+	public String getAsignadoA(){return asignadoA;}
+	public void setAsignadoA(String asignadoA){this.asignadoA = asignadoA;}
 } 

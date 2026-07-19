@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface TareaRepository extends JpaRepository<Tarea, Long>{
-    @Query("SELECT g FROM Tarea g WHERE g.asignadoAId.email = :email")
+    @Query("SELECT g FROM Tarea g WHERE g.asignadoA.email = :email")
     List<Tarea> buscarTareaPorEmailUsuario(@Param("email") String email);
 }

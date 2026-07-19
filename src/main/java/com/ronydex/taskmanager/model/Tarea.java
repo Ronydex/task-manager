@@ -23,11 +23,11 @@ public class Tarea{
 
     @ManyToOne
     @JoinColumn(name = "usuarioCrea")
-    private Usuario creadoPorId;
+    private Usuario creadoPor;
 
     @ManyToOne
     @JoinColumn(name = "usuarioAsig")
-    private Usuario asignadoAId;
+    private Usuario asignadoA;
 
     @Column(name = "fecha_creacion", updatable = false)
     private LocalDateTime fechaCreacion = LocalDateTime.now();
@@ -35,12 +35,12 @@ public class Tarea{
     @Column(name = "fecha_solucion", updatable = true)
     private LocalDateTime fechaSolucion;
 
-    public Tarea(String tituloTarea, String descripcionTarea, EstadosTarea estadoActTar, Usuario creadoPorId, Usuario asignadoAId, LocalDateTime fechaCreacion, LocalDateTime fechaSolucion){
+    public Tarea(String tituloTarea, String descripcionTarea, EstadosTarea estadoActTar, Usuario creadoPor, Usuario asignadoA, LocalDateTime fechaCreacion, LocalDateTime fechaSolucion){
         this.tituloTarea = tituloTarea;
         this.descripcionTarea = descripcionTarea;
         this.estadoActTar = estadoActTar;
-        this.creadoPorId = creadoPorId;
-        this.asignadoAId = asignadoAId;
+        this.creadoPor = creadoPor;
+        this.asignadoA = asignadoA;
         this.fechaCreacion = fechaCreacion;
         this.fechaSolucion = fechaSolucion;
     }
@@ -60,11 +60,11 @@ public class Tarea{
     public EstadosTarea getEstadoActTar() { return estadoActTar; }
     public void setEstadoActTar(EstadosTarea estadoActTar) {this.estadoActTar = estadoActTar; }
 
-    public Usuario getCreadoPorId() { return creadoPorId; }
-    public void setCreadoPorId(Usuario creadoPorId) { this.creadoPorId = creadoPorId; }
+    public Usuario getCreadoPor() { return creadoPor; }
+    public void setCreadoPor(Usuario creadoPor) { this.creadoPor = creadoPor; }
 
-    public Usuario getAsignadoAId() { return asignadoAId; }
-    public void setAsignadoAId(Usuario asignadoAId) { this.asignadoAId = asignadoAId;}    
+    public Usuario getAsignadoA() { return asignadoA; }
+    public void setAsignadoA(Usuario asignadoA) { this.asignadoA = asignadoA;}    
 
     public LocalDateTime getFechaCreacion() { return fechaCreacion; }
     public void setFechaCreacion(LocalDateTime fechaCreacion) { this.fechaCreacion = fechaCreacion; }

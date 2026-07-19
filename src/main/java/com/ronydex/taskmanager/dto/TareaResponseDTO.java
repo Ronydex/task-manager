@@ -1,7 +1,6 @@
 package com.ronydex.taskmanager.dto;
 
 import com.ronydex.taskmanager.model.EstadosTarea;
-import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
 
 public class TareaResponseDTO{
