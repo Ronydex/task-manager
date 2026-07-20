@@ -1,5 +1,4 @@
 package com.ronydex.taskmanager.service;
-
 import com.ronydex.taskmanager.model.Tarea;
 import com.ronydex.taskmanager.model.Usuario;
 import com.ronydex.taskmanager.repository.UsuarioRepository;
@@ -37,9 +36,20 @@ public class TareaService {
 		Tarea tareaGuardada = tareaRepo.save(tarea);
 		TareaResponseDTO respuestaTar = new TareaResponseDTO();
 		respuestaTar.setTituloTarea(tareaGuardada.getTituloTarea());
-		respuestaTar.setDecripcionTarea(tareaGuardada.getDescripcionTarea());
+		respuestaTar.setDescripcionTarea(tareaGuardada.getDescripcionTarea());
 		respuestaTar.setCreadoPorUser(tareaGuardada.getCreadoPor().getNombre());
 		respuestaTar.setAsignadoAUser(tareaGuardada.getAsignadoA().getNombre());
+		return respuestaTar;
+	}
+
+	public TareaResponseDTO obtenerPorId(Long id){
+		Tarea tarea = tareaRepo.findById(id)
+			.orElseThrow(() -> new RuntimeException("La tarea no fue encontrada o no existe"));
+		TareaResponseDTO respuestaTar = new TareaResponseDTO();
+		respuestaTar.setTituloTarea(tarea.getTituloTarea());
+		respuestaTar.setDescripcionTarea(tarea.getDescripcionTarea());
+		respuestaTar.setCreadoPorUser(tarea.getCreadoPor().getNombre());
+		respuestaTar.setAsignadoAUser(tarea.getAsignadoA().getNombre());
 		return respuestaTar;
 	}
 }

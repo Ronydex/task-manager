@@ -31,7 +31,7 @@ public class TareaResponseDTO{
 	public void setTituloTarea(String tituloTarea){this.tituloTarea = tituloTarea;}
 
 	public String getDescripcionTarea(){return descripcionTarea;}
-	public void setDecripcionTarea(String descripcionTarea){this.descripcionTarea = descripcionTarea;}
+	public void setDescripcionTarea(String descripcionTarea){this.descripcionTarea = descripcionTarea;}
 
 	public EstadosTarea getEstadoActTar(){return estadoActTar;}
 	public void setEstadoActTar(EstadosTarea estadoActTar){this.estadoActTar = estadoActTar;}

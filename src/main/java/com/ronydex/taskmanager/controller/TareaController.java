@@ -11,12 +11,12 @@ import org.springframework.http.HttpStatus;
 
 import com.ronydex.taskmanager.dto.TareaRegistroDTO;
 import com.ronydex.taskmanager.dto.TareaResponseDTO;
-import com.ronydex.taskmanager.dto.UsuarioResponseDTO;
 import com.ronydex.taskmanager.service.TareaService;
-import com.ronydex.taskmanager.service.UsuarioService;
+
+import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/tarea")
+@RequestMapping("/api/tareas")
 public class TareaController {
 
 	private final TareaService tareaServ;
@@ -26,8 +26,14 @@ public class TareaController {
 	}
 
 	@PostMapping
-		public ResponseEntity<TareaResponseDTO> crearTarea (@Valid @RequestBody TareaRegistroDTO tareaRegDTO){
-			UsuarioResponseDTO usuarioResp = 
-		}
+	public ResponseEntity<TareaResponseDTO> crearTarea (@Valid @RequestBody TareaRegistroDTO tareaRegDTO){
+		TareaResponseDTO tareaResp = tareaServ.crearTarea(tareaRegDTO);
+		return ResponseEntity.status(HttpStatus.CREATED).body(tareaResp);
+	}
 
+	@GetMapping("/{id}")
+	public ResponseEntity<TareaResponseDTO> devolverTarea(@PathVariable Long id){
+		TareaResponseDTO tareaResp = tareaServ.obtenerPorId(id);
+		return ResponseEntity.ok(tareaResp);
+	}
 }
