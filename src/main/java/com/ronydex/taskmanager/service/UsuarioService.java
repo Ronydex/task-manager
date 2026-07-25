@@ -1,6 +1,7 @@
 package com.ronydex.taskmanager.service;
 
 import com.ronydex.taskmanager.model.Usuario;
+import com.ronydex.taskmanager.model.Roles;
 import com.ronydex.taskmanager.repository.UsuarioRepository;
 import com.ronydex.taskmanager.dto.UsuarioRegistroDTO;
 import com.ronydex.taskmanager.dto.UsuarioResponseDTO;
@@ -60,21 +61,23 @@ public class UsuarioService {
 	return respuestaBorrado;
     }
 
-    public UsuarioResponseDTO actualizarEstUsuario(Long id, UsuarioRegistroDTO userRegDTO,RolAsignado rolSolicitado){
+    public UsuarioResponseDTO actualizarEstUsuario(Long id, UsuarioRegistroDTO userRegDTO,Roles rolSolicitado){
     	Usuario usuario = usuarioRepo.findById(id)
 		.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 	usuario.setNombre(userRegDTO.getNombre());
 	usuario.setEmail(userRegDTO.getEmail());
-	usuario.setPassword(userRegDTO.getPassword()); 
-	if(rolSolicitado == RolAsignado.ROL_PM || RolAsignado.ADMIN){
+	usuario.setPassword(userRegDTO.getPassword());
 
+	if(rolSolicitado == Roles.ROL_PM || rolSolicitado == Roles.ADMIN){
+    		usuario.setRolAsignado(userRegDTO.getRolAsignado());
 	}
-	else{
-	UsuarioResponseDTO respuestaEstActualizado = new UsuarioResponseDTO();
-	respuestaEstActualizado.setNombre(usuario.getNombre());
-	respuestaEstActualizado.setEmail(usuario.getEmail());
-	respuestaEstActualizado.setPassword(usuario.getPassword());
-	}
+	Usuario usuarioGuardado = usuarioRepo.save(usuario);
+	UsuarioResponseDTO respuesta = new UsuarioResponseDTO();
+	respuesta.setIdUsuario(usuario.getIdUsuario());
+	respuesta.setNombre(usuario.getNombre());
+	respuesta.setEmail(usuario.getEmail());
+	respuesta.setRolAsignado(usuario.getRolAsignado());
+	respuesta.setFechaRegistro(usuario.getFechaRegistro());
+	return respuesta;
     }
-
 }
