@@ -47,5 +47,34 @@ public class UsuarioService {
 
     }
 
+    public UsuarioResponseDTO borrarUsuario(Long id){
+    	Usuario usuario = usuarioRepo.findById(id)
+		.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+	UsuarioResponseDTO respuestaBorrado = new UsuarioResponseDTO();
+	respuestaBorrado.setIdUsuario(usuario.getIdUsuario());
+	respuestaBorrado.setNombre(usuario.getNombre());
+	respuestaBorrado.setEmail(usuario.getEmail());
+	respuestaBorrado.setRolAsignado(usuario.getRolAsignado());
+	respuestaBorrado.setFechaRegistro(usuario.getFechaRegistro());
+	usuarioRepo.delete(usuario);
+	return respuestaBorrado;
+    }
+
+    public UsuarioResponseDTO actualizarEstUsuario(Long id, UsuarioRegistroDTO userRegDTO,RolAsignado rolSolicitado){
+    	Usuario usuario = usuarioRepo.findById(id)
+		.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+	usuario.setNombre(userRegDTO.getNombre());
+	usuario.setEmail(userRegDTO.getEmail());
+	usuario.setPassword(userRegDTO.getPassword()); 
+	if(rolSolicitado == RolAsignado.ROL_PM || RolAsignado.ADMIN){
+
+	}
+	else{
+	UsuarioResponseDTO respuestaEstActualizado = new UsuarioResponseDTO();
+	respuestaEstActualizado.setNombre(usuario.getNombre());
+	respuestaEstActualizado.setEmail(usuario.getEmail());
+	respuestaEstActualizado.setPassword(usuario.getPassword());
+	}
+    }
 
 }
