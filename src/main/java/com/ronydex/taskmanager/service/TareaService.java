@@ -39,6 +39,9 @@ public class TareaService {
 		respuestaTar.setDescripcionTarea(tareaGuardada.getDescripcionTarea());
 		respuestaTar.setCreadoPorUser(tareaGuardada.getCreadoPor().getNombre());
 		respuestaTar.setAsignadoAUser(tareaGuardada.getAsignadoA().getNombre());
+		respuestaTar.setIdTarea(tareaGuardada.getIdTarea());
+		respuestaTar.setEstadoActTar(tareaGuardada.getEstadoActTar());
+		respuestaTar.setFechaCreacion(tareaGuardada.getFechaCreacion());
 		return respuestaTar;
 	}
 
@@ -50,6 +53,45 @@ public class TareaService {
 		respuestaTar.setDescripcionTarea(tarea.getDescripcionTarea());
 		respuestaTar.setCreadoPorUser(tarea.getCreadoPor().getNombre());
 		respuestaTar.setAsignadoAUser(tarea.getAsignadoA().getNombre());
+		respuestaTar.setIdTarea(tarea.getIdTarea());
+		respuestaTar.setEstadoActTar(tarea.getEstadoActTar());
+		respuestaTar.setFechaCreacion(tarea.getFechaCreacion());
 		return respuestaTar;
+	}
+
+	public TareaResponseDTO borrarTarea(Long id){
+		Tarea tarea = tareaRepo.findById(id)
+			.orElseThrow(() -> new RuntimeException("La tarea no fue encontrada o no existe"));
+		TareaResponseDTO respuestaBorrado = new TareaResponseDTO();
+		respuestaBorrado.setIdTarea(tarea.getIdTarea());
+		respuestaBorrado.setTituloTarea(tarea.getTituloTarea());
+		respuestaBorrado.setDescripcionTarea(tarea.getDescripcionTarea());
+		respuestaBorrado.setEstadoActTar(tarea.getEstadoActTar());
+		respuestaBorrado.setCreadoPorUser(tarea.getCreadoPor().getNombre());
+		respuestaBorrado.setAsignadoAUser(tarea.getAsignadoA().getNombre());
+		respuestaBorrado.setFechaCreacion(tarea.getFechaCreacion());
+		tareaRepo.delete(tarea);
+		return respuestaBorrado;
+	}
+
+	public TareaResponseDTO actualizarTarea(Long id,TareaRegistroDTO tareaRegDTO){
+		Tarea tarea = tareaRepo.findById(id)
+			.orElseThrow(() -> new RuntimeException("La tarea no fue encontrada o no existe"));
+		tarea.setTituloTarea(tareaRegDTO.getTituloTarea());
+		tarea.setDescripcionTarea(tareaRegDTO.getDescripcionTarea());
+		tarea.setEstadoActTar(tareaRegDTO.getEstadoActTar());
+		Usuario asignado = usuarioRepo.findByEmail(tareaRegDTO.getAsignadoA())
+			.orElseThrow(() -> new RuntimeException("El usuario asignado no existe"));
+		tarea.setAsignadoA(asignado);
+		tareaRepo.save(tarea);
+		TareaResponseDTO respuesta = new TareaResponseDTO();
+		respuesta.setTituloTarea(tarea.getTituloTarea());
+		respuesta.setDescripcionTarea(tarea.getDescripcionTarea());
+		respuesta.setCreadoPorUser(tarea.getCreadoPor().getNombre());
+		respuesta.setAsignadoAUser(tarea.getAsignadoA().getNombre());
+		respuesta.setIdTarea(tarea.getIdTarea());
+		respuesta.setEstadoActTar(tarea.getEstadoActTar());
+		respuesta.setFechaCreacion(tarea.getFechaCreacion());
+		return respuesta;
 	}
 }
