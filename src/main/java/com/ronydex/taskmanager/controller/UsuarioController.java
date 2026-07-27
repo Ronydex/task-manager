@@ -15,7 +15,7 @@ import jakarta.validation.Valid;
 
 
 @RestController
-@RequestMapping("/api/usuario")
+@RequestMapping("/api/usuarios")
 public class UsuarioController {
 
 	private final UsuarioService usuarioServ;

@@ -1,4 +1,5 @@
 package com.ronydex.taskmanager.service;
+
 import com.ronydex.taskmanager.model.Tarea;
 import com.ronydex.taskmanager.model.Usuario;
 import com.ronydex.taskmanager.repository.UsuarioRepository;
@@ -6,6 +7,7 @@ import com.ronydex.taskmanager.repository.TareaRepository;
 import com.ronydex.taskmanager.dto.TareaRegistroDTO;
 import com.ronydex.taskmanager.dto.TareaResponseDTO;
 
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -94,4 +96,25 @@ public class TareaService {
 		respuesta.setFechaCreacion(tarea.getFechaCreacion());
 		return respuesta;
 	}
+
+	public List<TareaResponseDTO>  listarTodasTareas(){
+		return  tareaRepo.findAll()
+			.stream()
+			.map(this::mapearADTO)
+			.toList();
+	}
+
+	//Metodo Helper del DTO
+	private TareaResponseDTO mapearADTO(Tarea tarea){
+		TareaResponseDTO dto = new TareaResponseDTO();
+		dto.setIdTarea(tarea.getIdTarea());
+		dto.setTituloTarea(tarea.getTituloTarea());
+		dto.setDescripcionTarea(tarea.getDescripcionTarea());
+		dto.setEstadoActTar(tarea.getEstadoActTar());
+		dto.setFechaCreacion(tarea.getFechaCreacion());
+		dto.setCreadoPorUser(tarea.getCreadoPor().getNombre());
+		dto.setAsignadoAUser(tarea.getAsignadoA().getNombre());
+		return dto;
+	}
+	
 }
