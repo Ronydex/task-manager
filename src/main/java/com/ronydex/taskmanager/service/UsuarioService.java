@@ -5,7 +5,7 @@ import com.ronydex.taskmanager.model.Roles;
 import com.ronydex.taskmanager.repository.UsuarioRepository;
 import com.ronydex.taskmanager.dto.UsuarioRegistroDTO;
 import com.ronydex.taskmanager.dto.UsuarioResponseDTO;
-
+import com.ronydex.taskmanager.exception.RecursoNoEncontradoException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -37,7 +37,7 @@ public class UsuarioService {
 
     public UsuarioResponseDTO obtenerPorId(Long id){
        Usuario usuario = usuarioRepo.findById(id)
-		.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+		.orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado con el ID"));
 	UsuarioResponseDTO respuesta = new UsuarioResponseDTO();
 	respuesta.setNombre(usuario.getNombre());
 	respuesta.setEmail(usuario.getEmail());
@@ -50,7 +50,7 @@ public class UsuarioService {
 
     public UsuarioResponseDTO borrarUsuario(Long id){
     	Usuario usuario = usuarioRepo.findById(id)
-		.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+		.orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado con el ID"));
 	UsuarioResponseDTO respuestaBorrado = new UsuarioResponseDTO();
 	respuestaBorrado.setIdUsuario(usuario.getIdUsuario());
 	respuestaBorrado.setNombre(usuario.getNombre());
@@ -63,7 +63,7 @@ public class UsuarioService {
 
     public UsuarioResponseDTO actualizarEstUsuario(Long id, UsuarioRegistroDTO userRegDTO,Roles rolSolicitado){
     	Usuario usuario = usuarioRepo.findById(id)
-		.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+		.orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado con el ID"));
 	usuario.setNombre(userRegDTO.getNombre());
 	usuario.setEmail(userRegDTO.getEmail());
 	usuario.setPassword(userRegDTO.getPassword());

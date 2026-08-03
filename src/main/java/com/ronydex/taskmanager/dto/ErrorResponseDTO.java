@@ -14,20 +14,20 @@ public class ErrorResponseDTO{
 
 	private String direccionURLFalla;
 
-	private Map<String, String>  mapaErroresValidacion = new HashMap<>();
+	private Map<String, String>  mapeaErroresValidacion = new HashMap<>();
 
-	public ErrorResponseDTO(LocalDateTime horaDelError, String estadoHttp, String mensajeDelError, String direccionURLFalla, Map<String,String>  mapaErroresValidacion ){
+	public ErrorResponseDTO(LocalDateTime horaDelError, String estadoHttp, String mensajeDelError, String direccionURLFalla, Map<String,String>  mapeaErroresValidacion ){
 	this.horaDelError = horaDelError;
 	this.estadoHttp = estadoHttp;
-	this.mensajeDelError = mensajeDelError;
+	this.mensajeDeError = mensajeDeError;
 	this.direccionURLFalla = direccionURLFalla;
-	this.mapaErroresValidacion = mapaErroresValidacion;
+	this.mapeaErroresValidacion = mapeaErroresValidacion;
 	}
 
-	public ErrorResponseDTO(LocalDateTime horaDelError, String estadoHttp, String mensajeDelError, String direccionURLFalla){
+	public ErrorResponseDTO(LocalDateTime horaDelError, String estadoHttp, String mensajeDeError, String direccionURLFalla){
 	this.horaDelError = horaDelError;
 	this.estadoHttp = estadoHttp;
-	this.mensajeDelError = mensajeDelError;
+	this.mensajeDeError = mensajeDeError;
 	this.direccionURLFalla = direccionURLFalla;
 	}
 	//GETTERS Y SETTERS
@@ -44,6 +44,6 @@ public class ErrorResponseDTO{
 	public String getDireccionURLFalla(){return direccionURLFalla;}
 	public void setDireccionURLFalla(String direccionURLFalla){this.direccionURLFalla = direccionURLFalla;}
 
-	public Map<String, String>  getMapeaErroresValidacion(){return mapaErroresValidacion;}
+	public Map<String, String>  getMapeaErroresValidacion(){return mapeaErroresValidacion;}
 	public void setMapeaErroresValidacion(Map<String, String>  mapeaErroresValidacion){this.mapeaErroresValidacion = mapeaErroresValidacion;}
 }

@@ -6,6 +6,7 @@ import com.ronydex.taskmanager.repository.UsuarioRepository;
 import com.ronydex.taskmanager.repository.TareaRepository;
 import com.ronydex.taskmanager.dto.TareaRegistroDTO;
 import com.ronydex.taskmanager.dto.TareaResponseDTO;
+import com.ronydex.taskmanager.exception.RecursoNoEncontradoException;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -25,9 +26,9 @@ public class TareaService {
 
 	public TareaResponseDTO crearTarea(TareaRegistroDTO tareaRegDTO){
 		Usuario creador = usuarioRepo.findByEmail(tareaRegDTO.getCreadoPor())
-			.orElseThrow(() -> new RuntimeException("El usuario creador no existe"));
+			.orElseThrow(() -> new RecursoNoEncontradoException("El usuario creador  no existe"));
 		Usuario asignado = usuarioRepo.findByEmail(tareaRegDTO.getAsignadoA())
-			.orElseThrow(() -> new RuntimeException("El usuario asignado no existe"));
+			.orElseThrow(() -> new RecursoNoEncontradoException("El usuario asignado no existe"));
 		Tarea tarea = new Tarea();
 		tarea.setCreadoPor(creador);
 		tarea.setAsignadoA(asignado);
@@ -49,7 +50,7 @@ public class TareaService {
 
 	public TareaResponseDTO obtenerPorId(Long id){
 		Tarea tarea = tareaRepo.findById(id)
-			.orElseThrow(() -> new RuntimeException("La tarea no fue encontrada o no existe"));
+			.orElseThrow(() -> new RecursoNoEncontradoException("La tarea no fue encontrada o no existe"));
 		TareaResponseDTO respuestaTar = new TareaResponseDTO();
 		respuestaTar.setTituloTarea(tarea.getTituloTarea());
 		respuestaTar.setDescripcionTarea(tarea.getDescripcionTarea());
@@ -63,7 +64,7 @@ public class TareaService {
 
 	public TareaResponseDTO borrarTarea(Long id){
 		Tarea tarea = tareaRepo.findById(id)
-			.orElseThrow(() -> new RuntimeException("La tarea no fue encontrada o no existe"));
+			.orElseThrow(() -> new RecursoNoEncontradoException("La tarea no fue encontrada o no existe"));
 		TareaResponseDTO respuestaBorrado = new TareaResponseDTO();
 		respuestaBorrado.setIdTarea(tarea.getIdTarea());
 		respuestaBorrado.setTituloTarea(tarea.getTituloTarea());
@@ -78,12 +79,12 @@ public class TareaService {
 
 	public TareaResponseDTO actualizarTarea(Long id,TareaRegistroDTO tareaRegDTO){
 		Tarea tarea = tareaRepo.findById(id)
-			.orElseThrow(() -> new RuntimeException("La tarea no fue encontrada o no existe"));
+			.orElseThrow(() -> new RecursoNoEncontradoException("La tarea no fue encontrada o no existe"));
 		tarea.setTituloTarea(tareaRegDTO.getTituloTarea());
 		tarea.setDescripcionTarea(tareaRegDTO.getDescripcionTarea());
 		tarea.setEstadoActTar(tareaRegDTO.getEstadoActTar());
 		Usuario asignado = usuarioRepo.findByEmail(tareaRegDTO.getAsignadoA())
-			.orElseThrow(() -> new RuntimeException("El usuario asignado no existe"));
+			.orElseThrow(() -> new RecursoNoEncontradoException("El usuario asignado no existe"));
 		tarea.setAsignadoA(asignado);
 		tareaRepo.save(tarea);
 		TareaResponseDTO respuesta = new TareaResponseDTO();
