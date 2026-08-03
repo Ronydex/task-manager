@@ -20,6 +20,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/tareas")
+@Tag(name="Tareas", description = "Endpoints para la gestión y asignación de tareas")
 public class TareaController {
 
 	private final TareaService tareaServ;
@@ -28,12 +29,22 @@ public class TareaController {
 	this.tareaServ = tareaServ;
 	}
 
+	@Operation(summary= "Crear una tarea", description = "Permite crear una tarea de acuerdo a las caracteristicas que hay en su Model")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Tarea creada de manera exitosa"),
+		@ApiResponse(responseCode = "404", description = "Fallo al crear la tarea solicitada")
+	})
 	@PostMapping
 	public ResponseEntity<TareaResponseDTO> crearTarea (@Valid @RequestBody TareaRegistroDTO tareaRegDTO){
 		TareaResponseDTO tareaResp = tareaServ.crearTarea(tareaRegDTO);
 		return ResponseEntity.status(HttpStatus.CREATED).body(tareaResp);
 	}
-
+	
+	@Operation(summary = "Trae una tarea por Id", description = "Retorna una tarea especifica por medio de su id")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "")	
+	
+	})
 	@GetMapping("/{id}")
 	public ResponseEntity<TareaResponseDTO> devolverTarea(@PathVariable Long id){
 		TareaResponseDTO tareaResp = tareaServ.obtenerPorId(id);
