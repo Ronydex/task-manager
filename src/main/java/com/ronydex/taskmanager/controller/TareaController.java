@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
+import 
+
 import com.ronydex.taskmanager.service.TareaService;
 import com.ronydex.taskmanager.dto.TareaRegistroDTO;
 import com.ronydex.taskmanager.dto.TareaResponseDTO;
@@ -42,7 +44,8 @@ public class TareaController {
 	
 	@Operation(summary = "Trae una tarea por Id", description = "Retorna una tarea especifica por medio de su id")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "")	
+		@ApiResponse(responseCode = "200", descripcion = "Tarea encontrada exitosamente")
+		@ApiResponse(responseCode = "400", descripcion = "No se encontró la tarea solicitada")	
 	
 	})
 	@GetMapping("/{id}")
