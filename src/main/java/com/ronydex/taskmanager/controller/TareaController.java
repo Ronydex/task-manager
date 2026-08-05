@@ -68,7 +68,12 @@ public class TareaController {
 		List<TareaResponseDTO> tareaResp = tareaServ.listarTodasTareas();
 		return ResponseEntity.ok(tareaResp);
 	}
-	
+
+	@Operation(summary = "Actualizar algun dato de una tarea", description = "Permite actualizar cualquier dato de una tarea elegida por el Id")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Dato de la Tarea Actualizado de manera correcta"),
+		@ApiResponse(responseCode = "400", description = "Error al intentar actualizar un Dato de la Tarea")
+	})	
 	@PutMapping("/{id}")
 	public ResponseEntity<TareaResponseDTO> actualizarTarea(@PathVariable Long id,
 		       						@RequestBody TareaRegistroDTO tareaRegDTO){
@@ -76,6 +81,11 @@ public class TareaController {
 		return ResponseEntity.ok(tareaResp);
 	}
 
+	@Operation(summary = "Borrar la Tarea seleccionada por Id", description = "Permite borrar una tarea por medio de su Id")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Tarea borrada de manera exitosa"),
+		@ApiResponse(responseCode = "400", description = "Error al borrar la tarea seleccionada")
+	})
 	@DeleteMapping("/{id}")
 	public  ResponseEntity<Void> borrarTarea(@PathVariable Long id){
 		tareaServ.borrarTarea(id);
