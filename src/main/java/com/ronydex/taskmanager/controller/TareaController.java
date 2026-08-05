@@ -11,7 +11,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
-import 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import com.ronydex.taskmanager.service.TareaService;
 import com.ronydex.taskmanager.dto.TareaRegistroDTO;
@@ -33,7 +38,7 @@ public class TareaController {
 
 	@Operation(summary= "Crear una tarea", description = "Permite crear una tarea de acuerdo a las caracteristicas que hay en su Model")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "Tarea creada de manera exitosa"),
+		@ApiResponse(responseCode = "201", description = "Tarea creada de manera exitosa"),
 		@ApiResponse(responseCode = "404", description = "Fallo al crear la tarea solicitada")
 	})
 	@PostMapping
@@ -44,8 +49,8 @@ public class TareaController {
 	
 	@Operation(summary = "Trae una tarea por Id", description = "Retorna una tarea especifica por medio de su id")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", descripcion = "Tarea encontrada exitosamente")
-		@ApiResponse(responseCode = "400", descripcion = "No se encontró la tarea solicitada")	
+		@ApiResponse(responseCode = "200", description = "Tarea encontrada exitosamente"),
+		@ApiResponse(responseCode = "400", description = "No se encontró la tarea solicitada")	
 	
 	})
 	@GetMapping("/{id}")
@@ -53,7 +58,11 @@ public class TareaController {
 		TareaResponseDTO tareaResp = tareaServ.obtenerPorId(id);
 		return ResponseEntity.ok(tareaResp);
 	}
-
+	@Operation(summary = "Traer todas las tareas en Lista", description = "Retorna todas las tareas a través de una Lista con su DTO")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Listado de tareas encontrado de manera exitosa"),
+		@ApiResponse(responseCode = "400", description = "Error al listar las tareas solicitadas")
+	})
 	@GetMapping()
 	public ResponseEntity<List<TareaResponseDTO>> listarTodasTareas(){
 		List<TareaResponseDTO> tareaResp = tareaServ.listarTodasTareas();
