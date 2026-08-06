@@ -49,6 +49,17 @@ public class GlobalExceptionHandler{
 				);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorCampoNoValido);
 		}
-
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<ErrorResponseDTO> manejarErroresGenericos(
+			Exception ex,
+			HttpServletRequest request){
+	ErrorResponseDTO errorGenerico = new ErrorResponseDTO(
+			LocalDateTime.now(),
+			"500_INTERNAL_SERVER_ERROR",
+			"Ocurrió un error interno en el servidor,favor de reintentar o contactar al administrador",
+			request.getRequestURI()
+			);
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorGenerico);
+			}
 	
 }
