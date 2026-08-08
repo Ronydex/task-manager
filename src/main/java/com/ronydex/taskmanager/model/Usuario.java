@@ -3,14 +3,14 @@ package com.ronydex.taskmanager.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import com.ronydex.taskmanager.model.Roles;
-import org.springframework.security.core.userdetails.UserDetails;
+
 
 
 @Entity
 @Table(name = "usuario")
 
 public class Usuario{
-    
+    	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idUsuario;
