@@ -7,11 +7,13 @@ import com.ronydex.taskmanager.dto.UsuarioRegistroDTO;
 import com.ronydex.taskmanager.dto.UsuarioResponseDTO;
 import com.ronydex.taskmanager.exception.RecursoNoEncontradoException;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepo;
+    private final PasswordEncoder passwordEncoder;
 
     public UsuarioService (UsuarioRepository usuarioRepo){
 	this.usuarioRepo = usuarioRepo;
@@ -21,7 +23,7 @@ public class UsuarioService {
 	Usuario usuario = new Usuario();
 	usuario.setNombre(userRegDTO.getNombre());
 	usuario.setEmail(userRegDTO.getEmail());
-	usuario.setPassword(userRegDTO.getPassword());
+	usuario.setPassword(passwordEncoder.encode(userRegDTO.getPassword()));
 	usuario.setRolAsignado(userRegDTO.getRolAsignado());
 	usuario.setFechaRegistro(java.time.LocalDateTime.now());
 	Usuario usuarioGuardado = usuarioRepo.save(usuario);
