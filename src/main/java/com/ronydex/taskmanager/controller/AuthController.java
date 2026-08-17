@@ -30,14 +30,25 @@ public class AuthController{
 	private JwtUtils jwtUtils;
 
 	@PostMapping("/register")
-	public ResponseEntity<UsuarioResponseDTO> registrarUsuario(@RequestBody Usuario usuario){
-		UsuarioResponseDTO respuesta = usuarioServ.registrarUsuario(dto);
+	public ResponseEntity<UsuarioResponseDTO> registrarUsuario( @Valid @RequestBody UsuarioRegistroDTO usuarioRegistroDTO){
+		UsuarioResponseDTO respuesta = usuarioServ.registrarUsuario(usuarioRegistroDTO);
 		return ResponseEntity.ok(respuesta);
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<UsuarioResponseDTO> ingresarUsuario(RequestBody Usuario usuario){
-	
+	public ResponseEntity<?> autenticarUsuario(@Valid @RequestBody UsuarioLoginDTO usuarioLoginDTO){
+	Authentication authentication = authenticationManager.authenticate(
+			new UsernamePasswordAuthenticationToken(
+				loginDTO.getEmail(),
+				loginDTO.getPassword()
+				)
+			);
+		String tokenJwt = jwtUtils.generateToken(authentication.getName());
+
+		Map<String, String> respuesta = new HashMap<>();
+		respuesta.put("token", tokenJwt);
+		
+		return ResponseEntity.ok(respuesta);
 	}
 
 }
