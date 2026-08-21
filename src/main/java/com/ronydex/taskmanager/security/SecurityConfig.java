@@ -8,9 +8,10 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
@@ -20,7 +21,7 @@ public class SecurityConfig {
 	private JwtAuthenticationFilter jwtAuthenticationFilter;
 
 	@Bean
-	private SecurityFilterChain securityFilterChain(HttpSecurity http){
+	public  SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 			//Paso 1.Apagar CSRF porque se usaran tokens JWT(stateless)
 			.csrf(csrf -> csrf.disable())
@@ -29,7 +30,7 @@ public class SecurityConfig {
 					session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 					)
 			//Paso 3.Reglas de acceso a las URLs
-			.authorizedHttpRequests(auth -> auth
+			.authorizeHttpRequests(auth -> auth
 				//Endpoints públicos (login, registro)
 				.requestMatchers("/api/auth/**").permitAll()
 				//Cualquier otra URL exige estar autenticado

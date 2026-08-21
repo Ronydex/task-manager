@@ -8,8 +8,9 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.security.Keys;
 
 import java.util.Date;
-import javax.crypto.SecretKey
-import java.nio.charset.StandardCharsets
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+
 @Component
 
 public class JwtUtils{
