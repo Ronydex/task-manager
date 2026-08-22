@@ -20,6 +20,10 @@ public class JwtUtils{
 	@Value("{$jwt.expiration}") //Va al archivo de application.properties por la variable con ese nombre y copia dentro de la variable jwtExpirationMs.
 	private int jwtExpirationMs;
 
+	private SecretKey getSigningKey(){
+		byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
+		return Keys.hmacShaKeyFor(keyBytes);
+	}
 	//Metodo para la creacion del token a traves de un "generador".
 	public String generateToken(UsuarioPrincipal usuarioPrincipal){
 		//Creacion de una variable de la fecha actual para el token
@@ -35,7 +39,7 @@ public class JwtUtils{
 			//Imprime la fecha de caducidad
 			.setExpiration(fechaExpiracion)
 			//Firma el token usando una clave secreta para que nadie pueda falsificarlo
-			.signWith(key)
+			.signWith(getSigningkey())
 			//Empaqueta toda la información y la convierte en una larga cadena de texto
 			.compact();
 	}

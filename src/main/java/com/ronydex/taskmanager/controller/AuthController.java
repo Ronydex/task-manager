@@ -1,5 +1,7 @@
 package com.ronydex.taskmanager.controller;
 
+import com.ronydex.taskmanager.security.UsuarioPrincipal;
+import com.ronydex.taskmanager.dto.UsuarioLoginDTO;
 import com.ronydex.taskmanager.dto.UsuarioRegistroDTO;
 import com.ronydex.taskmanager.dto.UsuarioResponseDTO;
 import com.ronydex.taskmanager.service.UsuarioService;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import com.ronydex.taskmanager.security.JwtUtils;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -39,11 +42,12 @@ public class AuthController{
 	public ResponseEntity<?> autenticarUsuario(@Valid @RequestBody UsuarioLoginDTO usuarioLoginDTO){
 	Authentication authentication = authenticationManager.authenticate(
 			new UsernamePasswordAuthenticationToken(
-				loginDTO.getEmail(),
-				loginDTO.getPassword()
+				usuarioLoginDTO.getEmail(),
+				usuarioLoginDTO.getPassword()
 				)
 			);
-		String tokenJwt = jwtUtils.generateToken(authentication.getName());
+		UsuarioPrincipal userPrincipal = (UsuarioPrincipal) authentication.getPrincipal();
+		String tokenJwt = jwtUtils.generateToken(userPrincipal);
 
 		Map<String, String> respuesta = new HashMap<>();
 		respuesta.put("token", tokenJwt);

@@ -15,8 +15,9 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepo;
     private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService (UsuarioRepository usuarioRepo){
+    public UsuarioService (UsuarioRepository usuarioRepo, PasswordEncoder passwordEncoder){
 	this.usuarioRepo = usuarioRepo;
+	this.passwordEncoder = passwordEncoder;
     }
 	
     public UsuarioResponseDTO registrarUsuario(UsuarioRegistroDTO userRegDTO){
