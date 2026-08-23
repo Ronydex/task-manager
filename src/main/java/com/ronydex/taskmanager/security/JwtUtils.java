@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.security.Keys;
-
+import io.jsonwebtoken.io.Decoders;
 import java.util.Date;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
@@ -17,7 +17,7 @@ public class JwtUtils{
 	@Value("${jwt.secret}") //Va al archivo de application.properties por la variable con ese nombre y copia el valor dentro de la variable jwtSecret.
 	private String jwtSecret;
 				
-	@Value("{$jwt.expiration}") //Va al archivo de application.properties por la variable con ese nombre y copia dentro de la variable jwtExpirationMs.
+	@Value("${jwt.expiration}") //Va al archivo de application.properties por la variable con ese nombre y copia dentro de la variable jwtExpirationMs.
 	private int jwtExpirationMs;
 
 	private SecretKey getSigningKey(){
@@ -39,7 +39,7 @@ public class JwtUtils{
 			//Imprime la fecha de caducidad
 			.setExpiration(fechaExpiracion)
 			//Firma el token usando una clave secreta para que nadie pueda falsificarlo
-			.signWith(getSigningkey())
+			.signWith(getSigningKey())
 			//Empaqueta toda la información y la convierte en una larga cadena de texto
 			.compact();
 	}
