@@ -20,8 +20,10 @@ import java.util.Map;
 import java.util.HashMap;
 
 
+
 @RestController
 @RequestMapping("api/auth/")
+@CrossOrigin(origins = "*")
 public class AuthController{
 	
 	//Inyeccion de dependencias

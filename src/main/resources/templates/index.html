@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager - Frontend Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 30px auto; padding: 20px; }
+        .card { border: 1px solid #ccc; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        input { display: block; width: 95%; padding: 8px; margin: 8px 0; }
+        button { background-color: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #218838; }
+        .btn-secundario { background-color: #007bff; }
+        .btn-secundario:hover { background-color: #0069d9; }
+        pre { background: #f4f4f4; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+
+    <h1>Task Manager API Client</h1>
+
+   <!-- 1. REGISTRO DE USUARIO -->
+   <div class="card">
+   	 <h2>1. Registrar Usuario</h2>
+	        <input type="text" id="regNombre" placeholder="Nombre completo">
+    		<input type="email" id="regEmail" placeholder="Correo electrónico">
+   	        <input type="password" id="regPassword" placeholder="Contraseña">
+    
+    		<label for="regRol">Rol asignado:</label>
+		<select id="regRol">
+    			<option value="ROL_PM">PROJECT_MANAGER (ROL_PM)</option>
+    			<option value="ROL_DEV">DEVELOPER (ROL_DEV)</option>
+    			<option value="ADMIN">ADMINISTRATOR (ADMIN)</option>
+    			<option value="CLIENTE">CLIENT (CLIENTE)</option>
+		</select>
+
+    	<button class="btn-secundario" onclick="registrar()" style="margin-top: 10px;">Registrarse</button>
+   </div>
+
+    <!-- 2. LOGIN -->
+    <div class="card">
+        <h2>2. Iniciar Sesión</h2>
+        <input type="email" id="loginEmail" placeholder="Correo electrónico">
+        <input type="password" id="loginPassword" placeholder="Contraseña">
+        <button onclick="login()">Entrar</button>
+    </div>
+
+    <!-- 3. PRUEBA DE ENDPOINT PROTEGIDO -->
+    <div class="card">
+        <h2>3. Probar Endpoint Protegido (Tareas)</h2>
+        <p>Presiona el botón para enviar una petición con el JWT guardado en el Header Authorization.</p>
+        <button class="btn-secundario" onclick="obtenerTareas()">Cargar Tareas</button>
+    </div>
+
+    <!-- 4. ESTADO DE SESIÓN Y LOGOUT -->
+    <div class="card">
+    	<h2>4. Control de Sesión</h2>
+    	<p id="estadoSesion">Estado: No has iniciado sesión</p>
+    	<button class="btn-danger" onclick="logout()">Cerrar Sesión</button>
+    </div>
+
+    <!-- PANEL DE RESULTADOS -->
+    <div class="card">
+        <h3>Respuesta del Servidor:</h3>
+        <pre id="output">Esperando acción...</pre>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8080';
+
+        // --- REGISTRO ---
+        async function registrar() {
+            const nombre = document.getElementById('regNombre').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+
+            try {
+                const res = await fetch(`${API_URL}/api/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nombre, email, password })
+                });
+
+                const data = await res.json();
+                mostrarRespuesta(`[Registro Status ${res.status}]\n` + JSON.stringify(data, null, 2));
+            } catch (err) {
+                mostrarRespuesta("Error en la petición: " + err.message);
+            }
+        }
+
+        // --- LOGIN ---
+        async function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const res = await fetch(`${API_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.token) {
+                    // Guardar JWT devuelto por el AuthController
+                    localStorage.setItem('jwtToken', data.token);
+                    mostrarRespuesta(`[Login Exitoso]\nToken guardado en LocalStorage:\n${data.token}`);
+                } else {
+                    mostrarRespuesta(`[Error de Autenticación ${res.status}]\n` + JSON.stringify(data, null, 2));
+                }
+            } catch (err) {
+                mostrarRespuesta("Error en la petición: " + err.message);
+            }
+        }
+
+        // --- PETICIÓN A ENDPOINT PROTEGIDO DE TAREAS ---
+        async function obtenerTareas() {
+            const token = localStorage.getItem('jwtToken');
+
+            if (!token) {
+                mostrarRespuesta("⚠️ No hay token guardado. Debes hacer Login primero.");
+                return;
+            }
+
+            try {
+                // Ajusta la URL según la ruta de tus tareas (ej: /api/tareas o /api/tasks)
+                const res = await fetch(`${API_URL}/api/tasks`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await res.json();
+                mostrarRespuesta(`[Respuesta GET /api/tasks - Status ${res.status}]\n` + JSON.stringify(data, null, 2));
+            } catch (err) {
+                mostrarRespuesta("Error en la petición: " + err.message);
+            }
+        }
+
+        function mostrarRespuesta(texto) {
+            document.getElementById('output').innerText = texto;
+        }
+	// --- CERRAR SESIÓN ---
+	function logout() {
+    		// 1. Eliminar el JWT de LocalStorage
+    		localStorage.removeItem('jwtToken');
+
+   		// 2. Notificar al usuario y actualizar interfaz
+    		actualizarEstadoSesion();
+    		mostrarRespuesta("Sesión cerrada. El JWT ha sido eliminado localmente.");
+	}
+
+		// --- ACTUALIZAR INDICADOR DE SESIÓN EN PANTALLA ---
+	function actualizarEstadoSesion() {
+    		const token = localStorage.getItem('jwtToken');
+    		const elementoEstado = document.getElementById('estadoSesion');
+
+    		if (token) {
+        	elementoEstado.innerText = "Estado: Sesión activa (Token almacenado)";
+        	elementoEstado.style.color = "green";
+   	 } 
+		else {
+        	elementoEstado.innerText = "Estado: No has iniciado sesión";
+        	elementoEstado.style.color = "red";
+   	 }
+	}
+
+		// Ejecutar la comprobación al cargar la página
+		window.onload = actualizarEstadoSesion;
+    </script>
+</body>
+</html>

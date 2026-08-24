@@ -27,6 +27,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/tareas")
+@CrossOrigin(origins = "*")
 @Tag(name="Tareas", description = "Endpoints para la gestión y asignación de tareas")
 public class TareaController {
 
