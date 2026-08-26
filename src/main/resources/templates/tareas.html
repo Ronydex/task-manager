@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager - Mis Tareas</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 30px auto; padding: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .btn-danger { background-color: #dc3545; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; }
+        .btn-danger:hover { background-color: #bd2130; }
+        .btn-primary { background-color: #007bff; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; }
+        .btn-primary:hover { background-color: #0069d9; }
+        .card { border: 1px solid #ccc; padding: 15px; border-radius: 8px; margin-top: 20px; }
+        pre { background: #f4f4f4; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Panel de Tareas</h1>
+        <button class="btn-danger" onclick="logout()">Cerrar Sesión</button>
+    </div>
+
+    <div class="card">
+        <h3>Lista de Tareas Registradas</h3>
+        <button class="btn-primary" onclick="cargarTareas()">Refrescar Tareas</button>
+        <pre id="contenido">Cargando tareas...</pre>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8080';
+
+        // 1. Guard de Navegación: Verificar si existe el JWT
+        const token = localStorage.getItem('jwtToken');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        // 2. Consulta al GET /api/tareas de TareaController
+        async function cargarTareas() {
+            try {
+                const res = await fetch(`${API_URL}/api/tareas`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                // Si el token expiró o es rechazado (401/403)
+                if (res.status === 401 || res.status === 403) {
+                    logout();
+                    return;
+                }
+
+                const data = await res.json();
+                document.getElementById('contenido').innerText = JSON.stringify(data, null, 2);
+            } catch (err) {
+                document.getElementById('contenido').innerText = "Error al consultar las tareas: " + err.message;
+            }
+        }
+
+        // 3. Cerrar Sesión
+        function logout() {
+            localStorage.removeItem('jwtToken');
+            window.location.href = 'login.html';
+        }
+
+        // Ejecutar la petición automáticamente al entrar a la pantalla
+        window.onload = cargarTareas;
+    </script>
+</body>
+</html>

@@ -20,9 +20,15 @@ public class SecurityConfig {
 	@Autowired
 	private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+	}
 	@Bean
 	public  SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
+			.cors(Customizer.withDefaults())
 			//Paso 1.Apagar CSRF porque se usaran tokens JWT(stateless)
 			.csrf(csrf -> csrf.disable())
 			//Paso 2.Definir que NO guarde sesiones en memoria del servidor
@@ -31,6 +37,7 @@ public class SecurityConfig {
 					)
 			//Paso 3.Reglas de acceso a las URLs
 			.authorizeHttpRequests(auth -> auth
+				.requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
 				//Endpoints públicos (login, registro)
 				.requestMatchers("/api/auth/**").permitAll()
 				//Cualquier otra URL exige estar autenticado
