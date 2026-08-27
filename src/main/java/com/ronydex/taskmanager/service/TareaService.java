@@ -25,9 +25,9 @@ public class TareaService {
 
 
 	public TareaResponseDTO crearTarea(TareaRegistroDTO tareaRegDTO){
-		Usuario creador = usuarioRepo.findByEmail(tareaRegDTO.getCreadoPor())
+		Usuario creador = usuarioRepo.findById(tareaRegDTO.getCreadoPor())
 			.orElseThrow(() -> new RecursoNoEncontradoException("El usuario creador  no existe"));
-		Usuario asignado = usuarioRepo.findByEmail(tareaRegDTO.getAsignadoA())
+		Usuario asignado = usuarioRepo.findById(tareaRegDTO.getAsignadoA())
 			.orElseThrow(() -> new RecursoNoEncontradoException("El usuario asignado no existe"));
 		Tarea tarea = new Tarea();
 		tarea.setCreadoPor(creador);
@@ -83,7 +83,7 @@ public class TareaService {
 		tarea.setTituloTarea(tareaRegDTO.getTituloTarea());
 		tarea.setDescripcionTarea(tareaRegDTO.getDescripcionTarea());
 		tarea.setEstadoActTar(tareaRegDTO.getEstadoActTar());
-		Usuario asignado = usuarioRepo.findByEmail(tareaRegDTO.getAsignadoA())
+		Usuario asignado = usuarioRepo.findById(tareaRegDTO.getAsignadoA())
 			.orElseThrow(() -> new RecursoNoEncontradoException("El usuario asignado no existe"));
 		tarea.setAsignadoA(asignado);
 		tareaRepo.save(tarea);

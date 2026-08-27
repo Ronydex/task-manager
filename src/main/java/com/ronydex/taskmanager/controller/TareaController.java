@@ -78,7 +78,7 @@ public class TareaController {
 	})	
 	@PutMapping("/{id}")
 	public ResponseEntity<TareaResponseDTO> actualizarTarea(@PathVariable Long id,
-		       						@RequestBody TareaRegistroDTO tareaRegDTO){
+		       						@Valid @RequestBody TareaRegistroDTO tareaRegDTO){
 		TareaResponseDTO tareaResp = tareaServ.actualizarTarea(id,tareaRegDTO);
 		return ResponseEntity.ok(tareaResp);
 	}

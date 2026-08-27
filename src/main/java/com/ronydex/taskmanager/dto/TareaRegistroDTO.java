@@ -15,10 +15,10 @@ public class TareaRegistroDTO{
 	private EstadosTarea estadoActTar;
 
 	@NotNull(message="La tarea debe ser creada por un Usuario")
-	private String creadoPor;
+	private Long creadoPor;
 
 	@NotNull(message="La tarea debe ser asignada a un Usuario")
-	private String asignadoA;
+	private Long asignadoA;
 
 	//GETTTERS Y SETTERS
 
@@ -31,9 +31,9 @@ public class TareaRegistroDTO{
 	public EstadosTarea getEstadoActTar(){return estadoActTar;}
 	public void setEstadoActTar(EstadosTarea estadoActTar){this.estadoActTar = estadoActTar;}
 
-	public String getCreadoPor(){return creadoPor;}
-	public void setCreadoPor(String creadoPor){this.creadoPor = creadoPor;}
+	public Long getCreadoPor(){return creadoPor;}
+	public void setCreadoPor(Long creadoPor){this.creadoPor = creadoPor;}
 
-	public String getAsignadoA(){return asignadoA;}
-	public void setAsignadoA(String asignadoA){this.asignadoA = asignadoA;}
+	public Long getAsignadoA(){return asignadoA;}
+	public void setAsignadoA(Long asignadoA){this.asignadoA = asignadoA;}
 } 
