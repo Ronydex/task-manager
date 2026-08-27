@@ -27,39 +27,22 @@ public class UsuarioService {
 	usuario.setPassword(passwordEncoder.encode(userRegDTO.getPassword()));
 	usuario.setRolAsignado(userRegDTO.getRolAsignado());
 	usuario.setFechaRegistro(java.time.LocalDateTime.now());
+	
 	Usuario usuarioGuardado = usuarioRepo.save(usuario);
-	UsuarioResponseDTO respuesta = new UsuarioResponseDTO();
-	respuesta.setNombre(usuarioGuardado.getNombre());
-	respuesta.setEmail(usuarioGuardado.getEmail());
-	respuesta.setRolAsignado(usuarioGuardado.getRolAsignado());
-	respuesta.setFechaRegistro(usuarioGuardado.getFechaRegistro());
-	respuesta.setIdUsuario(usuarioGuardado.getIdUsuario());
-	return respuesta;
+	return convertirAResponseDTO(usuarioGuardado);
     
     }
 
     public UsuarioResponseDTO obtenerPorId(Long id){
        Usuario usuario = usuarioRepo.findById(id)
 		.orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado con el ID"));
-	UsuarioResponseDTO respuesta = new UsuarioResponseDTO();
-	respuesta.setNombre(usuario.getNombre());
-	respuesta.setEmail(usuario.getEmail());
-  	respuesta.setRolAsignado(usuario.getRolAsignado());
-	respuesta.setFechaRegistro(usuario.getFechaRegistro());
-	respuesta.setIdUsuario(usuario.getIdUsuario());
-	return respuesta;
-
+       return convertirAResponseDTO(usuario);
     }
 
     public UsuarioResponseDTO borrarUsuario(Long id){
     	Usuario usuario = usuarioRepo.findById(id)
 		.orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado con el ID"));
-	UsuarioResponseDTO respuestaBorrado = new UsuarioResponseDTO();
-	respuestaBorrado.setIdUsuario(usuario.getIdUsuario());
-	respuestaBorrado.setNombre(usuario.getNombre());
-	respuestaBorrado.setEmail(usuario.getEmail());
-	respuestaBorrado.setRolAsignado(usuario.getRolAsignado());
-	respuestaBorrado.setFechaRegistro(usuario.getFechaRegistro());
+	UsuarioResponseDTO respuestaBorrado = convertirAResponseDTO(usuario);
 	usuarioRepo.delete(usuario);
 	return respuestaBorrado;
     }
@@ -69,18 +52,26 @@ public class UsuarioService {
 		.orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado con el ID"));
 	usuario.setNombre(userRegDTO.getNombre());
 	usuario.setEmail(userRegDTO.getEmail());
-	usuario.setPassword(userRegDTO.getPassword());
+	
+	if(userRegDTO.getPassword() != null && !userRegDTO.getPassword().isBlank()){
+	usuario.setPassword(passwordEncoder.encode(userRegDTO.getPassword()));
+	}
 
 	if(rolSolicitado == Roles.ROL_PM || rolSolicitado == Roles.ADMIN){
     		usuario.setRolAsignado(userRegDTO.getRolAsignado());
 	}
 	Usuario usuarioGuardado = usuarioRepo.save(usuario);
-	UsuarioResponseDTO respuesta = new UsuarioResponseDTO();
-	respuesta.setIdUsuario(usuario.getIdUsuario());
-	respuesta.setNombre(usuario.getNombre());
-	respuesta.setEmail(usuario.getEmail());
-	respuesta.setRolAsignado(usuario.getRolAsignado());
-	respuesta.setFechaRegistro(usuario.getFechaRegistro());
-	return respuesta;
+	return convertirAResponseDTO(usuarioGuardado);
     }
+
+    private UsuarioResponseDTO convertirAResponseDTO(Usuario usuario){
+	UsuarioResponseDTO dto = new UsuarioResponseDTO();
+	dto.setIdUsuario(usuario.getIdUsuario());
+	dto.setNombre(usuario.getNombre());
+	dto.setEmail(usuario.getEmail());
+	dto.setRolAsignado(usuario.getRolAsignado());
+	dto.setFechaRegistro(usuario.getFechaRegistro());
+	return dto;
+    	}
+
 }
