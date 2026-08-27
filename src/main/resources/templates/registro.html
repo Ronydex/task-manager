@@ -8,7 +8,7 @@
         .card { border: 1px solid #ccc; padding: 20px; border-radius: 8px; }
         input, select { display: block; width: 92%; padding: 8px; margin: 10px 0; }
         button { width: 100%; background-color: #007bff; color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer; }
-        .error { color: red; margin-top: 10px; font-size: 14px; }
+        .error { color: red; margin-top: 10px; font-size: 14px; word-wrap: break-word; }
         .link { text-align: center; margin-top: 15px; }
     </style>
 </head>
@@ -47,20 +47,26 @@
             const password = document.getElementById('password').value;
             const rolAsignado = document.getElementById('rol').value;
             const errorDiv = document.getElementById('mensajeError');
+            errorDiv.innerText = "";
 
             try {
+                // Endpoint alineado con @RequestMapping("/api/auth") de Spring Security
                 const res = await fetch(`${API_URL}/api/auth/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ nombre, email, password, rolAsignado })
                 });
 
-                if (res.ok) {
+                if (res.status === 201 || res.ok) {
                     alert("¡Registro exitoso! Ahora puedes iniciar sesión.");
                     window.location.href = 'login.html';
                 } else {
                     const data = await res.json();
-                    errorDiv.innerText = data.message || "Error al registrar el usuario";
+                    if (data.mapeaErroresValidacion && Object.keys(data.mapeaErroresValidacion).length > 0) {
+                        errorDiv.innerText = Object.values(data.mapeaErroresValidacion).join(", ");
+                    } else {
+                        errorDiv.innerText = data.mensajeDeError || data.message || "Error al registrar el usuario";
+                    }
                 }
             } catch (err) {
                 errorDiv.innerText = "Error al conectar con el servidor";

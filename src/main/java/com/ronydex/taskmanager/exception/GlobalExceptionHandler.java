@@ -49,6 +49,7 @@ public class GlobalExceptionHandler{
 				);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorCampoNoValido);
 		}
+	/*
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorResponseDTO> manejarErroresGenericos(
 			Exception ex,
@@ -61,5 +62,15 @@ public class GlobalExceptionHandler{
 			);
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorGenerico);
 			}
-	
+*/
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<Map<String, Object>> manejarErrorGenerico(Exception ex, HttpServletRequest request) {
+    		Map<String, Object> error = new HashMap<>();
+    		error.put("direccionURLFalla", request.getRequestURI());
+    		error.put("estadoHttp", HttpStatus.INTERNAL_SERVER_ERROR);
+    		error.put("horaDelError", LocalDateTime.now());
+    // 💡 Esto te imprimirá la verdadera causa del error en pantalla:
+   		 error.put("mensajeDeError", ex.getClass().getSimpleName() + ": " + ex.getMessage());
+    		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+}
 }

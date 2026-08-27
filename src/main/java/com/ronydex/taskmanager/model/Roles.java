@@ -28,10 +28,9 @@ public enum Roles implements GrantedAuthority{
     }
 
 
-    public static GrantedAuthority fromString(String nombreRol) {
+    public static Roles fromString(String nombreRol) {
     	return Arrays.stream(Roles.values())
 		.filter(role -> role.value.equalsIgnoreCase(nombreRol) || role.getAuthority().equalsIgnoreCase(nombreRol))
-		.map(role -> new SimpleGrantedAuthority(role.getAuthority()))
 		.findFirst()
 		.orElseThrow(() -> new IllegalArgumentException("Rol no reconocido en el sistema " + nombreRol));
     }

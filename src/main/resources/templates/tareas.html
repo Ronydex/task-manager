@@ -5,14 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Manager - Mis Tareas</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 30px auto; padding: 20px; }
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        .btn-danger { background-color: #dc3545; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; }
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 30px auto; padding: 20px; background-color: #f9f9f9; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
+        .card { background: white; border: 1px solid #e0e0e0; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .btn-danger { background-color: #dc3545; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .btn-danger:hover { background-color: #bd2130; }
-        .btn-primary { background-color: #007bff; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; }
+        .btn-primary { background-color: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .btn-primary:hover { background-color: #0069d9; }
-        .card { border: 1px solid #ccc; padding: 15px; border-radius: 8px; margin-top: 20px; }
-        pre { background: #f4f4f4; padding: 10px; border-radius: 4px; overflow-x: auto; }
+        input, textarea, select { display: block; width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        pre { background: #f4f4f4; padding: 15px; border-radius: 4px; overflow-x: auto; font-family: monospace; }
+        .row { display: flex; gap: 10px; }
     </style>
 </head>
 <body>
@@ -22,6 +24,37 @@
         <button class="btn-danger" onclick="logout()">Cerrar Sesión</button>
     </div>
 
+    <!-- Formulario para Crear Tareas -->
+    <div class="card">
+        <h3>Crear Nueva Tarea</h3>
+        <form id="formTarea">
+            <input type="text" id="tituloTarea" placeholder="Título de la tarea" required>
+            <textarea id="descripcionTarea" placeholder="Descripción detallada de la tarea" rows="3" required></textarea>
+            
+            <label for="estadoActTar">Estado de la Tarea:</label>
+            <select id="estadoActTar">
+                <option value="PENDIENTE">PENDIENTE</option>
+                <option value="EN_PROCESO">EN_PROCESO</option>
+                <option value="COMPLETADA">COMPLETADA</option>
+            </select>
+
+            <div class="row">
+                <div style="flex: 1;">
+                    <label for="creadoPorId">ID Usuario Creador:</label>
+                    <input type="number" id="creadoPorId" value="1" min="1" required>
+                </div>
+                <div style="flex: 1;">
+                    <label for="asignadoAId">ID Usuario Asignado:</label>
+                    <input type="number" id="asignadoAId" value="1" min="1" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary">Guardar Tarea</button>
+        </form>
+        <div id="msgTarea" style="margin-top: 15px; font-weight: bold;"></div>
+    </div>
+
+    <!-- Contenedor para la Lista de Tareas -->
     <div class="card">
         <h3>Lista de Tareas Registradas</h3>
         <button class="btn-primary" onclick="cargarTareas()">Refrescar Tareas</button>
@@ -31,13 +64,13 @@
     <script>
         const API_URL = 'http://localhost:8080';
 
-        // 1. Guard de Navegación: Verificar si existe el JWT
+        // 1. Validar Sesión (Guard JWT)
         const token = localStorage.getItem('jwtToken');
         if (!token) {
             window.location.href = 'login.html';
         }
 
-        // 2. Consulta al GET /api/tareas de TareaController
+        // 2. Cargar Tareas (GET /api/tareas)
         async function cargarTareas() {
             try {
                 const res = await fetch(`${API_URL}/api/tareas`, {
@@ -48,7 +81,6 @@
                     }
                 });
 
-                // Si el token expiró o es rechazado (401/403)
                 if (res.status === 401 || res.status === 403) {
                     logout();
                     return;
@@ -61,13 +93,53 @@
             }
         }
 
-        // 3. Cerrar Sesión
+        // 3. Registrar Tarea (POST /api/tareas)
+	document.getElementById('formTarea').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const msg = document.getElementById('msgTarea');
+    msg.innerText = "";
+
+    // Construcción del JSON enviando IDs directos como Long/Integer
+    const payload = {
+        tituloTarea: document.getElementById('tituloTarea').value,
+        descripcionTarea: document.getElementById('descripcionTarea').value,
+        estadoActTar: document.getElementById('estadoActTar').value,
+        creadoPor: parseInt(document.getElementById('creadoPorId').value), // 👈 ID numérico directo
+        asignadoA: parseInt(document.getElementById('asignadoAId').value)   // 👈 ID numérico directo
+    };
+
+    try {
+        const res = await fetch(`${API_URL}/api/tareas`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+            msg.style.color = 'green';
+            msg.innerText = "¡Tarea creada con éxito!";
+            document.getElementById('formTarea').reset();
+            cargarTareas();
+        } else {
+            const errorData = await res.json();
+            msg.style.color = 'red';
+            msg.innerText = "Error: " + (errorData.mensajeDeError || "Error al procesar la tarea");
+        }
+    } catch (err) {
+        msg.style.color = 'red';
+        msg.innerText = "Error de conexión con el servidor.";
+    }
+});
+        // 4. Logout
         function logout() {
             localStorage.removeItem('jwtToken');
             window.location.href = 'login.html';
         }
 
-        // Ejecutar la petición automáticamente al entrar a la pantalla
+        // Cargar datos automáticamente al inicio
         window.onload = cargarTareas;
     </script>
 </body>
