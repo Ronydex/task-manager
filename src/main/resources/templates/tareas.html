@@ -30,7 +30,11 @@
                     <label for="estadoActTar">Estado de la Tarea:</label>
                     <select id="estadoActTar" required>
                         <option value="PENDIENTE">PENDIENTE</option>
-                        <option value="EN_PROGRESO">EN PROGRESO</option>
+                        <option value="EN_PROCESO">EN PROCESO</option>
+                        <option value="SOLUCION_PLANIFICADA">SOLUCION PLANIFICADA</option>
+                        <option value="RELEVADO">RELEVADO</option>
+                        <option value="CANCELADO">CANCELADO</option>
+                        <option value="FINALIZADO">FINALIZADO</option>
                     </select>
                 </div>
 
@@ -42,17 +46,20 @@
                             <input type="text" id="creadoPorNombre" value="aaron" readonly />
                         </div>
                     </div>
-                <div class="user-field">
-                    <label>Asignado a:</label>
-                <div class="input-duo">
-                <span class="badge-id" id="asignadoAId">1</span>
-                <select id="asignadoASelect" onchange="document.getElementById('asignadoAId').innerText = this.value">
-                    <option value="1">aaron (ID: 1)</option>
-                    <option value="2">carlos (ID: 2)</option>
-                    <option value="3">rtest (ID: 3)</option>
-            </select>
-            </div>
-            </div>
+
+                    <div class="user-field">
+                        <label>Asignado a:</label>
+                        <div class="input-duo">
+                            <span class="badge-id" id="asignadoAId">1</span>
+                            <select id="asignadoASelect" onchange="document.getElementById('asignadoAId').innerText = this.value">
+                                <option value="1">aaron (ID: 1)</option>
+                                <option value="2">carlos (ID: 2)</option>
+                                <option value="3">rtest (ID: 3)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
                 <button type="submit" class="btn-primary" style="margin-top: 15px;">Guardar Tarea</button>
             </form>
         </section>

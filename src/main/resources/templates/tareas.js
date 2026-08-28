@@ -4,7 +4,6 @@ const token = localStorage.getItem('jwtToken');
 document.addEventListener("DOMContentLoaded", () => {
     cargarTareas();
     
-    // Asignación de evento al formulario de creación
     const formTarea = document.getElementById('formTarea');
     if (formTarea) {
         formTarea.addEventListener('submit', crearTarea);
@@ -36,11 +35,10 @@ function renderizarTarjetas(tareas) {
     const badgeContador = document.getElementById('contadorTareas');
 
     if (!contenedor) return;
-
     contenedor.innerHTML = '';
 
-    // Filtrar tareas activas (no completadas)
-    const tareasActivas = tareas.filter(t => t.estadoActTar !== 'COMPLETADA' && t.estadoActTar !== 'RESUELTO');
+    // Filtrar tareas que no estén ni FINALIZADO ni CANCELADO
+    const tareasActivas = tareas.filter(t => t.estadoActTar !== 'FINALIZADO' && t.estadoActTar !== 'CANCELADO');
 
     if (badgeContador) {
         badgeContador.innerText = `No. Tareas: ${tareasActivas.length}`;
@@ -57,13 +55,14 @@ function renderizarTarjetas(tareas) {
         card.innerHTML = `
             <div class="tarea-info-main">
                 <h3>${t.tituloTarea} <small>(#${t.idTarea})</small></h3>
+                <small style="color: #1a2b3c;">Estado: <b>${t.estadoActTar}</b></small>
             </div>
             <div class="tarea-info-fecha">
                 <p><b>Límite resolución:</b></p>
                 <p>${t.fechaSolucion ? t.fechaSolucion : 'Sin asignar'}</p>
             </div>
             <div class="tarea-info-accion">
-                <p style="margin-bottom: 5px;"><small>Asignado a:</small> <b>${t.asignadoAUser}</b></p>
+                <p style="margin-bottom: 5px;"><small>Asignado a:</small> <b>${t.asignadoAUser || t.asignadoA || 'N/A'}</b></p>
                 <button class="btn-status-change" onclick="marcarResuelta(${t.idTarea})">
                     Resolver Tarea
                 </button>
@@ -76,20 +75,16 @@ function renderizarTarjetas(tareas) {
 async function crearTarea(e) {
     e.preventDefault();
 
-    // ID fijado del usuario creador (del elemento HTML)
     const creadoPorIdVal = document.getElementById('creadoPorId').innerText.trim();
-    
-    // ID del usuario asignado (si tienes select o input, lo leemos de forma segura)
     const selectAsignado = document.getElementById('asignadoASelect');
-    const idAsignadoVal = selectAsignado && selectAsignado.value ? selectAsignado.value : "1";
+    const idAsignadoVal = selectAsignado ? selectAsignado.value : "1";
 
-    // OJO: Los nombres de las propiedades deben coincidir con tu TareaRegistroDTO en Spring Boot
     const payload = {
         tituloTarea: document.getElementById('tituloTarea').value,
         descripcionTarea: document.getElementById('descripcionTarea').value,
-        estadoActTar: document.getElementById('estadoActTar').value,
-        creadoPorUser: parseInt(creadoPorIdVal),
-        asignadoAUser: parseInt(idAsignadoVal)
+        estadoActTar: document.getElementById('estadoActTar').value, // Envía el Enum correcto
+        creadoPor: parseInt(creadoPorIdVal),
+        asignadoA: parseInt(idAsignadoVal)
     };
 
     try {
@@ -104,12 +99,13 @@ async function crearTarea(e) {
 
         if (res.ok) {
             document.getElementById('formTarea').reset();
-            cargarTareas(); // Refresca las tarjetas en vivo
+            cargarTareas();
         } else {
-            console.error("Error al crear tarea. Status:", res.status);
+            const errorText = await res.text();
+            console.error(`Error ${res.status} al crear tarea:`, errorText);
         }
     } catch (err) {
-        console.error("Error al crear tarea:", err);
+        console.error("Error en la petición al crear tarea:", err);
     }
 }
 
@@ -121,11 +117,13 @@ async function marcarResuelta(idTarea) {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ estadoActTar: 'COMPLETADA' })
+            body: JSON.stringify({ estadoActTar: 'FINALIZADO' }) // Envía el Enum FINALIZADO
         });
 
         if (res.ok) {
             cargarTareas();
+        } else {
+            console.error(`Error al actualizar estado. Status: ${res.status}`);
         }
     } catch (err) {
         console.error("Error al actualizar estado:", err);

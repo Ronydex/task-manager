@@ -53,6 +53,23 @@ public class SecurityConfig {
 				.requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
 				//Endpoints públicos (login, registro)
 				.requestMatchers("/api/auth/**").permitAll()
+				
+				// --- ACCIONES EXCLUSIVAS DEL ADMINISTRADOR ---
+				.requestMatchers(org.springframework.http.HttpMethod.POST, "/api/tareas").hasRole("ADMINISTRATOR")
+				.requestMatchers(org-springframework.http.HttpMethod.DELETE, "/api/usuarios/developers/**").hasRole("ADMINISTRATOR")
+
+				// --- ACCIONES EXCLUSIVAS DEL PROJECT MANAGER ---
+				.requestMatchers(org.springframework.http.HttpMethod.POST, "/api/tareas").hasAnyRole("ADMINISTRATOR", "PROJECT_MANAGER")
+				.requestMatchers(org.springframework.http.HttpMethod.PUT, "/api/tareas/{id}/reasignar").hasAnyRole("ADMINISTRATOR", "PROJECT_MANAGER")
+				.requestMatchers(org.springframework.http.HttpMethod.PUT, "/api/tareas/{id}/reabrir").hasAnyRole("ADMINISTRAOTR", "PROJECT_MANAGER")
+
+				// --- ACCIONES EXCLUSIVAS DEL DEVELOPER ---
+				.requestMatchers(org.springframework.http.HttpMethod.PUT, "/api/tareas/{id}/cerrar").hasAnyRole("ADMINISTRATOR", "PROJECT_MANAGER", "DEVELOPER")
+				// ---ACCIONES EXCLUSIVAS DEL CLIENTE ---
+				.requestMatchers(org.springframework.http.HttpMethod.POST, "/api/tareas/{id}/solicitar-cierre").hasRole("CLIENT")
+
+				// ---LECTURA GENERAL DE TAREAS ---
+				.requestMatchers(org.springframework.http.HttpMethod.GET, "/api/tareas/**").hasAnyRole("ADMINISTRATOR", "PROJECT_MANAGER", "DEVELOPER", "CLIENT")
 				//Cualquier otra URL exige estar autenticado
 				.anyRequest().authenticated()
 				)
