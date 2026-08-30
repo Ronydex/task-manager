@@ -9,10 +9,38 @@
 <body>
 
     <div class="main-layout">
+        <!-- Encabezado Principal -->
         <header class="top-header">
             <h1>Vista de Tareas</h1>
             <button id="btnLogout" class="btn-danger">Cerrar sesión</button>
         </header>
+
+        <!-- Módulo de Gestión de Developers (Visible solo para ADMIN) -->
+        <section class="card-box" id="seccionGestionDevs">
+            <h2>Gestión de Desarrolladores</h2>
+            
+            <!-- Formulario rápido para crear -->
+            <form id="formCrearDev" style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <input type="text" id="devNombre" placeholder="Nombre completo" required />
+                <input type="email" id="devEmail" placeholder="Correo electrónico" required />
+                <button type="submit" class="btn-primary">Registrar Dev</button>
+            </form>
+
+            <!-- Tabla con lista y opción de borrado -->
+            <table class="tabla-devs">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaDevsBody">
+                    <!-- Cargado dinámicamente -->
+                </tbody>
+            </table>
+        </section>
 
         <!-- Formulario Crear Nueva Tarea -->
         <section class="card-box">
