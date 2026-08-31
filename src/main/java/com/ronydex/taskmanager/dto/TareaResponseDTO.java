@@ -1,8 +1,11 @@
 package com.ronydex.taskmanager.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ronydex.taskmanager.model.EstadosTarea;
 import java.time.LocalDateTime;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TareaResponseDTO{
 	
 	private Long idTarea;
@@ -17,8 +20,10 @@ public class TareaResponseDTO{
 
 	private String asignadoAUser;
 
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime fechaCreacion;
 
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime fechaSolucion;
 
 	private String tiempoResolucion;

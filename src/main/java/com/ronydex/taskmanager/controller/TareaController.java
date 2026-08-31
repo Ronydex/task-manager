@@ -13,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,7 +39,7 @@ public class TareaController {
 	@Operation(summary= "Crear una tarea", description = "Permite crear una tarea de acuerdo a las caracteristicas que hay en su Model")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "201", description = "Tarea creada de manera exitosa"),
-		@ApiResponse(responseCode = "404", description = "Fallo al crear la tarea solicitada")
+		@ApiResponse(responseCode = "400", description = "Fallo al crear la tarea solicitada")
 	})
 	@PostMapping
 	public ResponseEntity<TareaResponseDTO> crearTarea (@Valid @RequestBody TareaRegistroDTO tareaRegDTO){
@@ -52,7 +50,7 @@ public class TareaController {
 	@Operation(summary = "Trae una tarea por Id", description = "Retorna una tarea especifica por medio de su id")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "Tarea encontrada exitosamente"),
-		@ApiResponse(responseCode = "400", description = "No se encontró la tarea solicitada")	
+		@ApiResponse(responseCode = "404", description = "No se encontró la tarea solicitada")	
 	
 	})
 	@GetMapping("/{id}")

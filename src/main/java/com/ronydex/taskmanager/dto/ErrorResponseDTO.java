@@ -4,8 +4,10 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.HashMap;
 
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ErrorResponseDTO{
 	
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime horaDelError;
 
 	private String estadoHttp;
@@ -15,6 +17,9 @@ public class ErrorResponseDTO{
 	private String direccionURLFalla;
 
 	private Map<String, String>  mapeaErroresValidacion = new HashMap<>();
+
+	public ErrorResponseDTO() {
+	}
 
 	public ErrorResponseDTO(LocalDateTime horaDelError, String estadoHttp, String mensajeDelError, String direccionURLFalla, Map<String,String>  mapeaErroresValidacion ){
 	this.horaDelError = horaDelError;

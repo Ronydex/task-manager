@@ -6,6 +6,7 @@ import jakarta.validation.constraints.*;
 public class TareaRegistroDTO{
 	
 	@NotBlank(message="El titulo no puede estar en blanco")
+	@Size(max = 100, message = "El titulo no debe tener mas de 100 caracteres")
 	private String tituloTarea;
 
 	@NotBlank(message="Necesitamos detalles de la tarea asignada")
@@ -19,6 +20,17 @@ public class TareaRegistroDTO{
 
 	@NotNull(message="La tarea debe ser asignada a un Usuario")
 	private Long asignadoA;
+
+	public TareaRegistroDTO(){
+	}
+
+	public TareaRegistroDTO (String tituloTarea, String descripcionTarea, EstadosTarea estadoActTar, Long creadoPor, Long asignadoA ){
+		this.tituloTarea = tituloTarea;
+		this.descripcionTarea = descripcionTarea;
+		this.estadoActTar = estadoActTar;
+		this.creadoPor = creadoPor;
+		this.asignadoA = asignadoA;
+	}
 
 	//GETTTERS Y SETTERS
 
